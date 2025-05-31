@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams Directory - A New World</title>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/team.css">
+
+    <!-- Google Analytics -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/ga-id')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.gaId) {
+                        // inject GA script  
+                        const script = document.createElement('script');
+                        script.async = true;
+                        script.src = `https://www.googletagmanager.com/gtag/js?id=${data.gaId}`;
+                        document.head.appendChild(script);
+
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag() { dataLayer.push(arguments); }
+                        gtag('js', new Date());
+                        gtag('config', data.gaId);
+                    } else {
+                        console.log('Google Analytics not configured');
+                    }
+                });
+        });  
+    </script>
+    <style>
+        body {
+            background-color: #f0f9fa;
+        }
+
+        h1 {
+            color: #13505b;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            background-color: #13505b;
+            border-color: #13505b;
+        }
+
+        .btn-primary:hover {
+            background-color: #0c3c45;
+            border-color: #0c3c45;
+        }
+
+        .btn-secondary {
+            background-color: #13505b;
+            border-color: #13505b;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0c3c45;
+            border-color: #0c3c45;
+        }
+
+        /* Card styling */
+        .card {
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-img-container {
+            width: 140px;
+            height: 140px;
+            min-width: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-img-left {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        .card-title {
+            color: #13505b;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive grid */
+        @media (max-width: 1199.98px) {
+            .col-md-4 {
+                width: 50%;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .col-md-4 {
+                width: 100%;
+            }
+
+            .card {
+                flex-direction: column !important;
+            }
+
+            .card-img-container {
+                width: 100%;
+                height: 200px;
+                min-width: unset;
+                padding: 1rem !important;
+            }
+
+            .card-body {
+                text-align: center;
+            }
+        }
+
+        /* Search form responsiveness */
+        @media (max-width: 767.98px) {
+            .search-container .row>div {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-logo">Aardvark Games</a>
+        <div class="navbar-links">
+            <a href="/colleges" class="nav-link" draggable="false">Colleges</a>
+            <a href="#" class="nav-link active" draggable="false">Teams</a>
+            <a href="/brackets" class="nav-link" draggable="false">Brackets</a>
+            <a href="/schedules" class="nav-link" draggable="false">Schedules</a>
+            <a href="/news" class="nav-link" draggable="false">News</a>
+            <a href="/about" class="nav-link" draggable="false">About Us</a>
+            <a href="/signup" class="nav-link" draggable="false">Account</a>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <h1 class="text-center">Teams Directory</h1>
+
+        <!-- Search Form -->
+        <form class="mb-4">
+            <div class="search-container">
+                <div class="row g-2">
+                    <div class="col-12 col-md-5">
+                        <input type="text" name="q" value="{{SEARCH_QUERY}}" class="form-control"
+                            placeholder="Search teams...">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <select class="form-select" name="by">
+                            <option value="all">All Teams & Colleges</option>
+                            <option value="name">By Team Name</option>
+                            <option value="college">By College</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <button type="button" class="btn btn-secondary w-100" onclick="clearSearch()">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Teams Grid -->
+        <div class="row">
+            {{TEAMS_LIST}}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/handleacc.js" defer></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const images = document.querySelectorAll('img');
+
+            images.forEach(img => {
+                // For already loaded or cached images
+                if (img.complete) {
+                    if (img.naturalWidth === 0) {
+                        handleImageError(img);
+                    } else {
+                        img.classList.add('loaded');
+                    }
+                }
+
+                // For images still loading
+                img.addEventListener('load', function () {
+                    this.classList.add('loaded');
+                });
+
+                // Error handling
+                img.addEventListener('error', function () {
+                    handleImageError(this);
+                });
+            });
+
+            function handleImageError(img) {
+                // Prevent infinite error loops
+                img.removeEventListener('error', handleImageError);
+
+                // Set placeholder
+                img.src = '/media/img/placeholder-250x250.png';
+
+                // Show the placeholder with transition
+                setTimeout(() => {
+                    img.classList.add('loaded');
+                }, 1000);
+            }
+        });
+        function clearSearch() {
+            // Clear search input
+            const searchInput = document.querySelector('input[name="q"]');
+            searchInput.value = '';
+
+            // Reset select to 'all'
+            const searchBy = document.querySelector('select[name="by"]');
+            searchBy.value = 'all';
+
+            // Submit the form to refresh results
+            document.querySelector('form').submit();
+        }
+    </script>
+</body>
+
+</html>

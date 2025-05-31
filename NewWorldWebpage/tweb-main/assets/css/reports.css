@@ -1,0 +1,234 @@
+/* Report Page Styling */
+body {
+    background-color: #041C20;
+    margin: 0;
+    /* Remove default margin */
+    padding: 0;
+    /* Remove default padding */
+    display: flex;
+    /* Ensure body uses flexbox for proper alignment */
+    flex-direction: column;
+    /* Stack content vertically */
+    min-height: 100vh;
+    /* Ensure body fills the viewport height */
+    gap: 3rem;
+}
+
+html {
+    height: 100%;
+    /* Ensure html fills the viewport height */
+}
+
+/* Light Table Styling */
+.table {
+    --bs-table-bg: #f8f9fa;
+    --bs-table-striped-bg: #ecf0f1;
+    --bs-table-hover-bg: #e2e6ea;
+    --bs-table-color: #212529;
+    color: #212529;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table thead {
+    background-color: #13505B;
+    color: white;
+}
+
+.table thead th {
+    border-bottom: none;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Fix for table container - make it fit content
+.table-responsive {
+    border-radius: 8px;
+    border: 1px solid #13505B;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+} */
+
+.table-responsive {
+    padding-right: 15px;
+    /* Match scrollbar width */
+}
+
+/* Make tables fill their container completely */
+.table {
+    flex-grow: 1;
+    margin-bottom: 0;
+}
+
+/* Column sorting */
+.sortable {
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+.sortable:hover {
+    background-color: #119DA4;
+}
+
+.sortable::after {
+    content: "⇅";
+    position: absolute;
+    right: 1rem;
+    opacity: 0.6;
+}
+
+.sortable.asc::after {
+    content: "↑";
+    opacity: 1;
+}
+
+.sortable.desc::after {
+    content: "↓";
+    opacity: 1;
+}
+
+/* Fix for the date range inputs and button alignment */
+.date-range {
+    background-color: #13505B;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    /* Align items vertically center */
+    justify-content: flex-start;
+    /* Left align date pickers */
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Fix vertical alignment of inputs and button */
+.date-range input[type="date"],
+.date-range button {
+    height: 38px;
+    /* Standard height for all elements */
+    line-height: normal;
+    margin: 0;
+}
+
+.date-range input[type="date"] {
+    max-width: 160px;
+    background-color: #f8f9fa;
+    color: #212529;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.date-range input[type="date"]:disabled {
+    background-color: #e9ecef;
+}
+
+/* Status Badges */
+.badge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+}
+
+.badge.bg-success {
+    background-color: #119DA4 !important;
+}
+
+.badge.bg-danger {
+    background-color: #f84d50 !important;
+}
+
+/* Report Container */
+.report-container {
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #13505B;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Report Header */
+.report-header {
+    color: #119DA4;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #13505B;
+}
+
+/* Totals row */
+.total-row {
+    background-color: #13505B !important;
+    color: white;
+    font-weight: bold;
+}
+
+/* Toast alerts - MOVED TO TOP */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+}
+
+/* Remove or override the existing .toast positioning */
+.toast {
+    position: relative !important;
+    bottom: auto !important;
+    right: auto !important;
+}
+
+.user-table th {
+    vertical-align: middle;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.user-table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+table.user-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+table.user-table th,
+table.user-table td {
+    padding: 12px 15px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #dee2e6;
+}
+
+table.user-table thead th {
+    background: #2c3e50;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .date-range {
+        flex-direction: column;
+    }
+
+    .date-range input[type="date"] {
+        max-width: 100%;
+        width: auto;
+    }
+
+    .date-range .btn-primary {
+        margin-left: 0;
+        width: auto;
+    }
+}

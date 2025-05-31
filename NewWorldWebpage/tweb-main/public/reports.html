@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports - A New World</title>
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/reports.css">
+
+  <!-- Google Analytics -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/api/ga-id')
+            .then(response => response.json())
+            .then(data => {
+                if (data.gaId) {
+                    // inject GA script  
+                    const script = document.createElement('script');
+                    script.async = true;
+                    script.src = `https://www.googletagmanager.com/gtag/js?id=${data.gaId}`;
+                    document.head.appendChild(script);
+
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag() { dataLayer.push(arguments); }
+                    gtag('js', new Date());
+                    gtag('config', data.gaId);
+                } else {
+                    console.log('Google Analytics not configured');
+                }
+            });
+    });  
+</script>
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="/" class="navbar-logo">Aardvark Games</a>
+    <div class="navbar-links">
+      <a href="/colleges" class="nav-link" draggable="false">Colleges</a>
+      <a href="/teams" class="nav-link" draggable="false">Teams</a>
+      <a href="/brackets" class="nav-link" draggable="false">Brackets</a>
+      <a href="/schedules" class="nav-link" draggable="false">Schedules</a>
+      <a href="/news" class="nav-link" draggable="false">News</a>
+      <a href="/about" class="nav-link" draggable="false">About Us</a>
+      <a href="/signup" class="nav-link active" draggable="false">Account</a>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4">
+    <!-- College Signup Report -->
+    <div class="report-container mb-4">
+      <h3 class="report-header">College Signup Report</h3>
+      <div class="date-range">
+        <div class="d-flex align-items-center">
+          <span class="text-white me-2">From:</span>
+          <input type="date" id="collegeStartDate" class="form-control">
+        </div>
+        <div class="d-flex align-items-center">
+          <span class="text-white me-2">To:</span>
+          <input type="date" id="collegeEndDate" class="form-control">
+        </div>
+        <button id="collegeApplyBtn" class="btn btn-primary px-4">Apply</button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped" id="collegeReportTable">
+          <thead>
+            <tr>
+              <th data-sort="date" class="sortable">Date Added</th>
+              <th data-sort="name" class="sortable">College Name</th>
+              <th data-sort="country" class="sortable">Country</th>
+              <th data-sort="teams" class="sortable text-center">Teams</th>
+              <th data-sort="members" class="sortable text-center">Members</th>
+              <th data-sort="moderator" class="sortable text-center">Moderator</th>
+              <th data-sort="page" class="sortable text-center">Has Page</th>
+            </tr>
+          </thead>
+          <tbody id="collegeReportBody"></tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="3">Total Colleges: <span id="totalColleges">0</span></td>
+              <td class="text-center">Total Teams: <span id="totalTeams">0</span></td>
+              <td class="text-center">Total Members: <span id="totalMembers">0</span></td>
+              <td colspan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tournament Status Report -->
+    <div class="report-container">
+      <h3 class="report-header">Tournament Status Report</h3>
+      <div class="date-range">
+        <div class="d-flex align-items-center">
+          <span class="text-white me-2">From:</span>
+          <input type="date" id="tournamentStartDate" class="form-control">
+        </div>
+        <div class="d-flex align-items-center">
+          <span class="text-white me-2">To:</span>
+          <input type="date" id="tournamentEndDate" class="form-control">
+        </div>
+        <button id="tournamentApplyBtn" class="btn btn-primary px-4">Apply</button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th data-sort="date" class="sortable">Next Match</th>
+              <th data-sort="name" class="sortable">College</th>
+              <th data-sort="country" class="sortable">Country</th>
+              <th data-sort="planned" class="sortable text-center">Planned</th>
+              <th data-sort="completed" class="sortable text-center">Completed</th>
+              <th data-sort="eliminations" class="sortable text-center">Eliminations</th>
+            </tr>
+          </thead>
+          <tbody id="tournamentReportBody"></tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="2">Total Colleges: <span id="totalTournamentColleges">0</span></td>
+              <td class="text-center">Total Planned: <span id="totalPlanned">0</span></td>
+              <td class="text-center">Total Completed: <span id="totalCompleted">0</span></td>
+              <td colspan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container"></div>
+
+  <!-- Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/handleacc.js" defer></script>
+  <!-- Reports -->
+  <script src="/js/reports.js" defer></script>
+</body>
+
+</html>

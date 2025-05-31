@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Dashboard - A New World</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/account.css">
+
+    <!-- Google Analytics -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/ga-id')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.gaId) {
+                        // inject GA script  
+                        const script = document.createElement('script');
+                        script.async = true;
+                        script.src = `https://www.googletagmanager.com/gtag/js?id=${data.gaId}`;
+                        document.head.appendChild(script);
+
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag() { dataLayer.push(arguments); }
+                        gtag('js', new Date());
+                        gtag('config', data.gaId);
+                    } else {
+                        console.log('Google Analytics not configured');
+                    }
+                });
+        });  
+    </script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="/" class="navbar-logo">Aardvark Games</a>
+        <div class="navbar-links">
+            <a href="/colleges" class="nav-link" draggable="false">Colleges</a>
+            <a href="/teams" class="nav-link" draggable="false">Teams</a>
+            <a href="/brackets" class="nav-link" draggable="false">Brackets</a>
+            <a href="/schedules" class="nav-link" draggable="false">Schedules</a>
+            <a href="/news" class="nav-link" draggable="false">News</a>
+            <a href="/about" class="nav-link" draggable="false">About Us</a>
+            <a href="/signup" class="nav-link active" draggable="false">Account</a>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-3 px-md-5">
+
+        <ul class="nav justify-content-center mt-4 mb-3 p-1 flex-wrap">
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="#user-management"
+                    style="color: rgb(196, 216, 219) !important;">User</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="#college-management"
+                    style="color: rgb(196, 216, 219) !important;">College</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="#team-management"
+                    style="color: rgb(196, 216, 219) !important;">Team</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="#news-management"
+                    style="color: rgb(196, 216, 219) !important;">News</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="#brackets-management"
+                    style="color: rgb(196, 216, 219) !important;">Brackets</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="#schedules-management"
+                    style="color: rgb(196, 216, 219) !important;">Schedules</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="#tournament-management"
+                    style="color: rgb(196, 216, 219) !important;">Tournament</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="#registrations-management"
+                    style="color: rgb(196, 216, 219) !important;">Registrations</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="#payments"
+                    style="color: rgb(196, 216, 219) !important;">Payments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="/reports"
+                    style="color: rgb(196, 216, 219) !important;">Reports</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="/stats"
+                    style="color: rgb(196, 216, 219) !important;">Analytics</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link fs-5 px-3 py-2" href="#quick-image"
+                    style="color: rgb(196, 216, 219) !important;">Upload Image</a>
+            </li>
+        </ul>
+
+        <div id="admin-box" class="column mt-1 mb-1">
+            <div class="row-md-2 text-center text-md-start mb-md-0">
+                <h2 id="currentAdmin">Welcome</h2>
+            </div>
+            <div class="row-md-2 text-center text-md-end">
+                <h2 id="currentRole">Role</h2>
+            </div>
+        </div>
+
+        <!-- User Management Section -->
+        <section id="user-management" class="mb-5">
+            <h1 class="text-center mb-4">User Management</h1>
+
+            <div class="row mb-3">
+                <div class="col-lg-8 col-xl-6 mx-auto">
+                    <div class="input-group">
+                        <input type="text" id="searchUser" class="form-control" placeholder="Search users...">
+                        <button id="searchButton" class="btn btn-primary">Search</button>
+                        <button id="clearSearchBtn" class="btn btn-secondary">Clear</button>
+                        <button id="addUserBtn" class="btn btn-primary">Add User</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- College Management Section -->
+        <section id="college-management" class="mb-5">
+            <h1 class="text-center mb-4">College Management</h1>
+
+            <div class="row mb-3">
+                <div class="col-lg-8 col-xl-6 mx-auto">
+                    <div class="input-group">
+                        <input type="text" id="searchCollege" class="form-control"
+                            placeholder="Search colleges (to clear, delete everything and press Search)...">
+                        <button id="searchCollegesBtn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 text-center">
+                    <button id="addCollegeBtn" class="btn btn-primary me-2 mb-2">Add College</button>
+                    <button id="editCollegeBtn" class="btn btn-warning me-2 mb-2">Edit College</button>
+                    <button id="deleteCollegeBtn" class="btn btn-delete mb-2">Delete College</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>College Name</th>
+                            <th>Location</th>
+                            <th>Founded</th>
+                            <th>Description</th>
+                            <th>Logo</th>
+                            <th>Picture</th>
+                        </tr>
+                    </thead>
+                    <tbody id="collegeTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Team Management Section -->
+        <section id="team-management" class="mb-5">
+            <h1 class="text-center mb-4">Team Management</h1>
+
+            <div class="row mb-3">
+                <div class="col-lg-8 col-xl-6 mx-auto">
+                    <div class="input-group">
+                        <input type="text" id="searchTeam" class="form-control"
+                            placeholder="Search teams (to clear, delete everything and press Search)...">
+                        <button id="searchTeamsBtn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 text-center">
+                    <button id="addTeamBtn" class="btn btn-primary me-2 mb-2">Add Team</button>
+                    <button id="editTeamBtn" class="btn btn-warning me-2 mb-2">Edit Team</button>
+                    <button id="deleteTeamBtn" class="btn btn-delete mb-2">Delete Team</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Team Name</th>
+                            <th>College ID</th>
+                            <th>College Name</th>
+                            <th>Create Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teamTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- News Management Section -->
+        <section id="news-management" class="mb-5">
+            <h1 class="text-center mb-4">News Management</h1>
+
+            <div class="row mb-3">
+                <div class="col-lg-8 col-xl-6 mx-auto">
+                    <div class="input-group">
+                        <input type="text" id="searchArticle" class="form-control"
+                            placeholder="Search articles by name (to clear, delete everything and press Search)...">
+                        <button id="searchArticlesBtn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 text-center">
+                    <button id="addArticleBtn" class="btn btn-primary me-2 mb-2">Add Article</button>
+                    <button id="editArticleBtn" class="btn btn-warning me-2 mb-2">Edit Article</button>
+                    <button id="deleteArticleBtn" class="btn btn-delete mb-2">Delete Article</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Author Name</th>
+                            <th>Author ID</th>
+                            <th>Article Title</th>
+                            <th>ImageURL</th>
+                            <th>Content</th>
+                            <th>Create Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="newsTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Brackets Management Section -->
+        <section id="brackets-management" class="mb-5">
+            <h1 class="text-center mb-4">Brackets Management</h1>
+
+            <div class="row mb-3">
+                <div class="col-lg-8 col-xl-6 mx-auto">
+                    <div class="input-group">
+                        <input type="text" id="searchTournaments" class="form-control"
+                            placeholder="Search by tournaments (to clear, delete everything and press Search)...">
+                        <button id="searchTournamentsBtn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 text-center">
+                    <button id="editBracketBtn" class="btn btn-warning me-2 mb-2">Edit Bracket</button>
+                    <button id="deleteBracketBtn" class="btn btn-delete mb-2">Reset Bracket</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tournament Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bracketsTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Schedules Management Section -->
+        <section id="schedules-management" class="mb-5">
+            <h1 class="text-center mb-4">Schedules Management</h1>
+
+            <div class="row mb-3">
+                <div class="col-lg-8 col-xl-6 mx-auto">
+                    <div class="input-group">
+                        <input type="text" id="searchMatches" class="form-control"
+                            placeholder="Search matches by teams (to clear, delete everything and press Search)...">
+                        <button id="searchMatchesBtn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 text-center">
+                    <button id="addMatchBtn" class="btn btn-primary me-2 mb-2">Add Match</button>
+                    <button id="editMatchBtn" class="btn btn-warning me-2 mb-2">Edit Match</button>
+                    <button id="deleteMatchBtn" class="btn btn-delete mb-2">Delete Match</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tournament</th>
+                            <th>Team 1</th>
+                            <th>Team 2</th>
+                            <th>Match Date</th>
+                            <th>Round</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matchesTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Tournament Management Section -->
+        <section id="tournament-management" class="mb-5">
+            <h1 class="text-center mb-4">Tournament Management</h1>
+
+            <div class="row mb-3">
+                <div class="col-lg-8 col-xl-6 mx-auto">
+                    <div class="input-group">
+                        <input type="text" id="searchTournament" class="form-control"
+                            placeholder="Search tournament by name (to clear, delete everything and press Search)...">
+                        <button id="searchTournamentBtn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 text-center">
+                    <button id="addTournamentBtn" class="btn btn-primary me-2 mb-2">Add Tournament</button>
+                    <button id="editTournamentBtn" class="btn btn-warning me-2 mb-2">Edit Tournament</button>
+                    <button id="deleteTournamentBtn" class="btn btn-delete mb-2">Delete Tournament</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Host College ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Start Date</th>
+                            <th>End Date Date</th>
+                            <th>Next Round Date</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Eliminations Complete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tournamentTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Registrations Management Section -->
+        <section id="registrations-management" class="mb-5">
+            <h1 class="text-center mb-4">Registrations Management</h1>
+
+            <div class="row mb-3">
+                <div class="col-lg-8 col-xl-6 mx-auto">
+                    <div class="input-group">
+                        <input type="text" id="searchRegistration" class="form-control"
+                            placeholder="Search registrations by user name (to clear, delete everything and press Search)...">
+                        <button id="searchRegistrationBtn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 text-center">
+                    <button id="viewRegistrationBtn" class="btn btn-primary me-2 mb-2">View Registration</button>
+                    <button id="editRegistrationBtn" class="btn btn-warning me-2 mb-2">Edit Registration</button>
+                    <button id="deleteRegistrationBtn" class="btn btn-delete mb-2">Delete Registration</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User ID</th>
+                            <th>Tournament ID</th>
+                            <th>Team ID</th>
+                            <th>Created Team Name</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                            <th>RegistrationDate</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registrationsTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Payments Section -->
+        <section id="payments" class="mb-5">
+            <h1 class="text-center mb-4">Payments</h1>
+
+            <div class="row mb-3">
+                <div class="col-lg-8 col-xl-6 mx-auto">
+                    <div class="input-group">
+                        <input type="text" id="searchPayment" class="form-control"
+                            placeholder="Search payments by user name (to clear, delete everything and press Search)...">
+                        <button id="searchPaymentBtn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 text-center">
+                    <button id="viewPaymentBtn" class="btn btn-primary me-2 mb-2">View Payment Data</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User ID</th>
+                            <th>Tournament ID</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>SuccessPageViewed</th>
+                            <th>PaymentDate</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Image Upload Section -->
+        <div class="container mt-5" id="quick-image">
+            <h3>Quick Image Upload</h3>
+            <div class="input-group mb-3">
+                <input type="file" id="quickUploadFile" hidden accept="image/*">
+                <button class="btn btn-primary" type="button"
+                    onclick="document.getElementById('quickUploadFile').click()">
+                    Choose Image
+                </button>
+                <input type="text" class="form-control" id="filePath" readonly>
+            </div>
+        </div>
+
+        <!-- Add User Modal -->
+        <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userModalLabel">Add New User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="userForm">
+                            <div class="mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="text" class="form-control" id="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="password" required>
+                                    <span class="input-group-text" id="passwordToggle">
+                                        <i class="fa fa-eye" id="eyeIcon"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Role</label>
+                                <select class="form-select" id="role" required>
+                                    <!-- Roles will be populated dynamically here -->
+                                </select>
+                            </div>
+                            <div id="playerFields" style="display: none;" class="mb-3">
+                                <div class="mb-3">
+                                    <label for="imageURL" class="form-label">Image URL</label>
+                                    <input type="text" id="imageURL" name="imageURL" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="validStudent" class="form-label">Valid Student ?</label>
+                                    <select id="validStudent" name="validStudent" class="form-select">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="teamId" class="form-label">Team ID (find in Team Management)</label>
+                                    <input type="number" id="teamId" name="teamId" class="form-control" min="1">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveUserBtn">Save User</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit User Modal -->
+        <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editUserForm">
+                            <input type="hidden" id="editUserId">
+                            <div class="mb-3">
+                                <label for="editName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="editName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="editEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editRole" class="form-label">Role</label>
+                                <select class="form-select" id="editRole" required>
+                                    <!-- Roles will be populated dynamically -->
+                                </select>
+                            </div>
+                            <div id="editPlayerFields" class="mb-3" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="editImageURL" class="form-label">Image URL</label>
+                                    <input type="text" class="form-control" id="editImageURL">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editValidStudent" class="form-label">Valid Student?</label>
+                                    <select class="form-select" id="editValidStudent">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editTeamId" class="form-label">Team ID (can be found under Team
+                                        Management
+                                        section):</label>
+                                    <input type="number" class="form-control" id="editTeamId" min="0">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveEditUserBtn">Update User</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete User Modal -->
+        <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteUserModalLabel">Are you sure you want to delete this user?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="userDetails"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add/Edit College Modal -->
+        <div class="modal fade" id="collegeModal" tabindex="-1" aria-labelledby="collegeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="collegeModalLabel">Add New College</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="collegeForm">
+                            <div class="mb-3">
+                                <label for="collegeName" class="form-label">College Name</label>
+                                <input type="text" class="form-control" id="collegeName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location</label>
+                                <input type="text" class="form-control" id="location" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="founded" class="form-label">Founded</label>
+                                <input type="text" class="form-control" id="founded" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" rows="4" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="logoURL" class="form-label">Logo URL</label>
+                                <input type="text" class="form-control" id="logoURL" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="pictureURL" class="form-label">Picture URL</label>
+                                <input type="text" class="form-control" id="pictureURL" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveCollegeBtn">Save College</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete College Modal -->
+        <div class="modal fade" id="deleteCollegeModal" tabindex="-1" aria-labelledby="deleteCollegeModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteCollegeModalLabel">Are you sure you want to delete this
+                            college?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="collegeDetails"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteCollegeBtn">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Team Modal -->
+        <div class="modal fade" id="addTeamModal" tabindex="-1" aria-labelledby="addTeamModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addTeamModalLabel">Add New Team</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addTeamForm">
+                            <div class="mb-3">
+                                <label for="selectAddCollege" class="form-label">Select College</label>
+                                <select id="selectAddCollege" class="form-select" required></select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="addTeamName" class="form-label">Team Name</label>
+                                <input type="text" class="form-control" id="addTeamName" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="createTeamBtn">Create Team</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Team Modal -->
+        <div class="modal fade" id="editTeamModal" tabindex="-1" aria-labelledby="editTeamModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTeamModalLabel">Edit Team</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editTeamForm">
+                            <div class="mb-3">
+                                <label for="selectEditCollege" class="form-label">Select New College</label>
+                                <select id="selectEditCollege" class="form-select"></select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editTeamName" class="form-label">New Team Name</label>
+                                <input type="text" class="form-control" id="editTeamName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="selectEditLeader" class="form-label">Select Leader</label>
+                                <select class="form-select" id="selectEditLeader"></select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="selectDeleteMember" class="form-label">Select Member to Delete</label>
+                                <select class="form-select" id="selectDeleteMember"></select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveTeamBtn">Save Team</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Team Modal -->
+        <div class="modal fade" id="deleteTeamModal" tabindex="-1" aria-labelledby="deleteTeamModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteTeamModalLabel">Are you sure you want to delete this team?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="teamDetails"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteTeamBtn">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Article Modal -->
+        <div class="modal fade" id="addArticleModal" tabindex="-1" aria-labelledby="addArticleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addArticleModalLabel">Add New Article</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addArticleForm">
+                            <div class="mb-3">
+                                <label for="addArticleAuthorName" class="form-label">Author Full Name</label>
+                                <input type="text" class="form-control" id="addArticleAuthorName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="addArticleName" class="form-label">Article Name</label>
+                                <input type="text" class="form-control" id="addArticleName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="addArticleImageURL" class="form-label">Article ImageURL</label>
+                                <input type="text" class="form-control" id="addArticleImageURL">
+                            </div>
+                            <div class="mb-3">
+                                <label for="addArticleContent" class="form-label">Article Content</label>
+                                <textarea class="form-control" id="addArticleContent" required></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="createArticleBtn">Create Article</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Article Modal -->
+        <div class="modal fade" id="editArticleModal" tabindex="-1" aria-labelledby="editArticleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editArticleModalLabel">Edit Article</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editArticleForm">
+                            <div class="mb-3">
+                                <label for="editArticleName" class="form-label">Article Name</label>
+                                <input type="text" class="form-control" id="editArticleName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editArticleImageURL" class="form-label">Article ImageURL</label>
+                                <input type="text" class="form-control" id="editArticleImageURL" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editArticleContent" class="form-label">Article Content</label>
+                                <textarea class="form-control" id="editArticleContent" rows="20" required></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveArticleBtn">Save Article</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Article Modal -->
+        <div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteArticleModalLabel">Are you sure you want to delete this
+                            article?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="articleDetails"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteArticleBtn">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Bracket Modal -->
+        <div class="modal fade" id="editBracketModal" tabindex="-1" aria-labelledby="editBracketModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editBracketModalLabel">Edit Bracket</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editBracketForm">
+                            <div class="mb-3">
+                                <label for="editBracketSelectBracket" class="form-label">Select Bracket</label>
+                                <select id="editBracketSelectBracket" class="form-select" required>
+                                    <option value="2">Semifinal</option>
+                                    <option value="3">Final</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editBracketSelectSemiFinal" class="form-label">Select Semifinal
+                                    Match</label>
+                                <select id="editBracketSelectSemiFinal" class="form-select" required>
+                                    <option value="0">First Semifinal Match</option>
+                                    <option value="1">Second Semifinal Match</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editBracketFirstTeamName" class="form-label">Exact First Team Name</label>
+                                <input type="text" id="editBracketFirstTeamName" name="editBracketFirstTeamName"
+                                    class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editBracketFirstTeamScore" class="form-label">First Team Score</label>
+                                <input type="number" id="editBracketFirstTeamScore" name="editBracketFirstTeamScore"
+                                    class="form-control" min="0" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editBracketSecondTeamName" class="form-label">Exact Second Team Name</label>
+                                <input type="text" id="editBracketSecondTeamName" name="editBracketSecondTeamName"
+                                    class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editBracketSecondTeamScore" class="form-label">Second Team Score</label>
+                                <input type="number" id="editBracketSecondTeamScore" name="editBracketSecondTeamScore"
+                                    class="form-control" min="0" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editBracketSelectWinner" class="form-label">Select Winner Team</label>
+                                <select id="editBracketSelectWinner" class="form-select" required>
+                                    <!-- Options populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editBracketMatchDate" class="form-label">Match Date</label>
+                                <input type="datetime-local" id="editBracketMatchDate" class="form-control"
+                                    placeholder="Select date and time" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveBracketBtn">Save Bracket</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Bracket Modal -->
+        <div class="modal fade" id="deleteBracketModal" tabindex="-1" aria-labelledby="deleteBracketModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteBracketModalLabel">Are you sure you want to reset this
+                            bracket?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="bracketDetails"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteBracketBtn">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Match Modal -->
+    <div class="modal fade" id="matchModal" tabindex="-1" aria-labelledby="matchModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="matchModalLabel">Add/Edit Match</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="matchForm">
+                        <div class="mb-3" id="tournamentSelectContainer">
+                            <label for="tournamentSelect" class="form-label">Tournament</label>
+                            <select class="form-select" id="tournamentSelect" required>
+                                <option value="">Select Tournament</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="matchTeam1ID" class="form-label">First Team ID (find in Team
+                                Management)</label>
+                            <input type="number" class="form-control" id="matchTeam1ID" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="matchFirstTeamScore" class="form-label">First Team Score (if applicable, leave 0
+                                for default)</label>
+                            <input type="number" id="matchFirstTeamScore" name="matchFirstTeamScore"
+                                class="form-control" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="matchTeam2ID" class="form-label">Second Team ID (find in Team
+                                Management)</label>
+                            <input type="number" class="form-control" id="matchTeam2ID" min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="matchSecondTeamScore" class="form-label">Second Team Score (if applicable, leave
+                                0 for default)</label>
+                            <input type="number" id="matchSecondTeamScore" name="matchSecondTeamScore"
+                                class="form-control" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="matchSelectWinner" class="form-label">Select Winner Team (if applicable, select
+                                any for default)</label>
+                            <select id="matchSelectWinner" class="form-select" required>
+                                <option value="1">Team 1</option>
+                                <option value="2">Team 2</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="matchMatchDate" class="form-label">Match Date</label>
+                            <input type="datetime-local" id="matchMatchDate" class="form-control"
+                                placeholder="Select date and time" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="matchRoundNumber" class="form-label">Round (4 - Quarterfinals, 5 - Round of
+                                16)</label>
+                            <input type="number" id="matchRoundNumber" name="matchRoundNumber" class="form-control"
+                                min="4" max="5" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveMatchBtn">Save Match</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Match Modal -->
+    <div class="modal fade" id="deleteMatchModal" tabindex="-1" aria-labelledby="deleteMatchModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteMatchModalLabel">Confirm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this
+                    match?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteMatchBtn">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Tournament Modal -->
+    <div class="modal fade" id="tournamentModal" tabindex="-1" aria-labelledby="tournamentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tournamentModalLabel">Add/Edit Tournament</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="tournamentForm">
+                        <div class="mb-3">
+                            <label for="tournamentName" class="form-label">Tournament Name</label>
+                            <input type="text" class="form-control" id="tournamentName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournamentDescription" class="form-label">Tournament Description
+                                (optional)</label>
+                            <input type="text" class="form-control" id="tournamentDescription" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournamentHostID" class="form-label">Host College ID (find in College
+                                Management)</label>
+                            <input type="number" id="tournamentHostID" name="tournamentHostID" class="form-control"
+                                min="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournamentStartDate" class="form-label">Tournament Start Date</label>
+                            <input type="datetime-local" id="tournamentStartDate" class="form-control"
+                                placeholder="Select date and time" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournamentEndDate" class="form-label">Tournament End Date (any date for
+                                default)</label>
+                            <input type="datetime-local" id="tournamentEndDate" class="form-control"
+                                placeholder="Select date and time" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournamentNextRoundDate" class="form-label">Next Round Date (optional)</label>
+                            <input type="datetime-local" id="tournamentNextRoundDate" class="form-control"
+                                placeholder="Select date and time">
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournamentLocation" class="form-label">Tournament Location</label>
+                            <input type="text" class="form-control" id="tournamentLocation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournamentSelectStatus" class="form-label">Select Tournament Status</label>
+                            <select id="tournamentSelectStatus" class="form-select" required>
+                                <option value="1">Upcoming</option>
+                                <option value="2">Ongoing</option>
+                                <option value="3">Completed</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tournamentSelectEliminationsComplete" class="form-label">Eliminations Complete
+                                (optional)</label>
+                            <select id="tournamentSelectEliminationsComplete" class="form-select" required>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveTournamentBtn">Save Tournament</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Tournament Modal -->
+    <div class="modal fade" id="deleteTournamentModal" tabindex="-1" aria-labelledby="deleteTournamentModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTournamentModalLabel">Confirm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this
+                    tournament?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteTournamentBtn">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Registration Modal -->
+    <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registrationModalLabel">Registration Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registrationDataForm">
+                        <div class="mb-3">
+                            <label for="viewRegistrationID" class="form-label">Registration ID</label>
+                            <input type="text" class="form-control" id="viewRegistrationID" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewRegistrationUserID" class="form-label">User ID</label>
+                            <input type="text" class="form-control" id="viewRegistrationUserID" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewRegistrationTournamentID" class="form-label">Tournament ID</label>
+                            <input type="text" class="form-control" id="viewRegistrationTournamentID" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewRegistrationTeamID" class="form-label">Team ID</label>
+                            <input type="text" class="form-control" id="viewRegistrationTeamID" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewRegistrationNewTeamName" class="form-label">Created Team Name</label>
+                            <input type="text" class="form-control" id="viewRegistrationNewTeamName" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewRegistrationMessage" class="form-label">Message</label>
+                            <textarea class="form-control" id="viewRegistrationMessage" rows="5" readonly
+                                aria-readonly="true"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewRegistrationStatus" class="form-label">Status</label>
+                            <input type="text" class="form-control" id="viewRegistrationStatus" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewRegistrationDate" class="form-label">Date</label>
+                            <input type="datetime-local" id="viewRegistrationDate" class="form-control"
+                                placeholder="Registration Date" readonly aria-readonly="true">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Registration Modal -->
+    <div class="modal fade" id="editRegistrationModal" tabindex="-1" aria-labelledby="editRegistrationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editRegistrationModalLabel">Edit Registration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registrationForm">
+                        <div class="mb-3">
+                            <label for="editRegistrationTournamentID" class="form-label">Tournament ID</label>
+                            <input type="number" class="form-control" id="editRegistrationTournamentID"
+                                name="editRegistrationTournamentID" min="1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRegistrationTeamID" class="form-label">Team ID</label>
+                            <input type="number" class="form-control" id="editRegistrationTeamID"
+                                name="editRegistrationTeamID" min="1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRegistrationStatus" class="form-label">Status</label>
+                            <select id="editRegistrationStatus" name="editRegistrationStatus" class="form-select">
+                                <option value="0">Pending</option>
+                                <option value="1">Verified</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveRegistrationBtn">Update Registration</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Registration Modal -->
+    <div class="modal fade" id="deleteRegistrationModal" tabindex="-1" aria-labelledby="deleteRegistrationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteRegistrationModalLabel">Confirm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this
+                    registration record?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteRegistrationBtn">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Payments Modal -->
+    <div class="modal fade" id="paymentsModal" tabindex="-1" aria-labelledby="paymentsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentsModalLabel">Payment Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="paymentDataForm">
+                        <div class="mb-3">
+                            <label for="viewPaymentID" class="form-label">Payment ID</label>
+                            <input type="text" class="form-control" id="viewPaymentID" readonly aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewPaymentUserID" class="form-label">User ID</label>
+                            <input type="text" class="form-control" id="viewPaymentUserID" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewPaymentTournamentID" class="form-label">Tournament ID</label>
+                            <input type="text" class="form-control" id="viewPaymentTournamentID" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewPaymentTeamID" class="form-label">Team ID</label>
+                            <input type="text" class="form-control" id="viewPaymentTeamID" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewPaymentAmount" class="form-label">Amount</label>
+                            <input type="text" class="form-control" id="viewPaymentAmount" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewPaymentStatus" class="form-label">Status</label>
+                            <input type="text" class="form-control" id="viewPaymentStatus" readonly
+                                aria-readonly="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="viewPaymentDate" class="form-label">Payment Date (if paid)</label>
+                            <input type="text" class="form-control" id="viewPaymentDate" readonly aria-readonly="true">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            document.getElementById('quickUploadFile').addEventListener('change', async function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch('/quick-upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const result = await response.json();
+                    document.getElementById('filePath').value = result.filePath;
+                } catch (error) {
+                    console.error('Upload failed:', error);
+                    alert('File upload failed');
+                }
+            });
+
+            document.getElementById('passwordToggle').addEventListener('click', function () {
+                const passwordInput = document.getElementById('password');
+                const toggle = document.getElementById('passwordToggle');
+                const eyeIcon = document.getElementById('eyeIcon');
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = "password";
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        });
+
+    </script>
+
+    <script src="/js/handleacc.js" defer></script>
+    <script src="/js/user-management.js" defer></script> <!-- User Management -->
+    <script src="/js/college-management.js" defer></script> <!-- College Management -->
+    <script src="/js/team-management.js" defer></script> <!-- Team Management -->
+    <script src="/js/news-management.js" defer></script> <!-- News Management -->
+    <script src="/js/brackets-management.js" defer></script> <!-- Brackets Management -->
+    <script src="/js/schedules-management.js" defer></script> <!-- Schedules Management -->
+    <script src="/js/tournament-management.js" defer></script> <!-- Tournament Management -->
+    <script src="/js/registrations-management.js" defer></script> <!-- Registrations Management -->
+    <script src="/js/loadpayments.js" defer></script> <!-- Payments -->
+</body>
+
+</html>

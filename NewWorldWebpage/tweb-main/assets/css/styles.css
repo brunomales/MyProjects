@@ -1,0 +1,434 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background-color: #F1FDFF;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a {
+    font-family: 'Kanit', sans-serif !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-shadow: 0.5px 1px black;
+}
+
+strong {
+    color: #9EF01A;
+}
+
+/* ----------------------------------------------------------- */
+/* Image Shadows */
+.shadow-dark {
+    box-shadow: -20px 20px #13505B;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+.shadow-light {
+    box-shadow: -20px 20px #119DA4;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+/* ----------------------------------------------------------- */
+/* Section Styles (Light and Dark) */
+.section-light {
+    background-color: #F1FDFF;
+    color: black;
+    padding: 30px;
+}
+
+.section-light h1 {
+    color: #13505B;
+    font-weight: bold;
+}
+
+.section-dark {
+    background-color: #13505B;
+    color: white;
+    padding: 30px;
+}
+
+.section-dark h1 {
+    color: #9EF01A;
+    font-weight: bold;
+}
+
+/* ----------------------------------------------------------- */
+/* Custom Button */
+.btn-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #00576d;
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 50px;
+    border-style: outset;
+}
+
+.btn-link:hover,
+.btn-link:focus,
+.btn-link:visited {
+    cursor: pointer;
+    text-shadow: none;
+    text-decoration: none !important;
+    text-decoration-style: none !important;
+    font-style: normal;
+    color: #ffffff !important;
+}
+
+.btn-delete {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #F84D50;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-delete:hover {
+    background-color: white;
+    color: #F84D50;
+}
+
+/* ----------------------------------------------------------- */
+/* Tournament Section Styles */
+.tournament-container {
+    background-color: #1E1E1E;
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.tournament-container h1 {
+    color: #9EF01A;
+    font-weight: bold;
+}
+
+.match-container {
+    background-color: #13505B;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.team-box {
+    width: 50px;
+    height: 50px;
+    background-color: #9EF01A;
+    border-radius: 5px;
+}
+
+.team-1-box {
+    background-color: #9EF01A;
+}
+
+.team-2-box {
+    background-color: #119DA4;
+}
+
+.row .col-5,
+.row .col-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+p.mb-0 {
+    margin-bottom: 0;
+}
+
+.winner {
+    color: #9EF01A !important;
+}
+
+.loser {
+    color: #041C20 !important;
+    text-decoration: line-through;
+}
+
+/* ----------------------------------------------------------- */
+/* Carousel */
+.carousel-inner {
+    background-color: #13505B;
+    height: 400px;
+}
+
+.carousel-item {
+    background-color: #13505B;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 400px;
+}
+
+#college-1 {
+    background-image: url("../media/img/college1.jpg");
+}
+
+#college-2 {
+    background-image: url("../media/img/college2.jpg");
+}
+
+#college-3 {
+    background-image: url("../media/img/college3.jpg");
+}
+
+.carousel-caption {
+    background-color: #041c205d;
+    color: white;
+    border-radius: 10px;
+}
+
+/* NAVBAR */
+.navbar {
+    background-color: #003f4f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    height: 60px;
+    flex-wrap: wrap;
+    contain: layout; /* Prevent layout shifts */
+    transform: translateZ(0); /* GPU acceleration */
+}
+
+.navbar-logo {
+    color: #119DA4;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    text-shadow: 2px 2px 3px black;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    height: 100%;
+    text-shadow: 0.5px 1px black;
+    contain: content; /* Isolate link container */
+}
+
+.nav-link {
+    color: #119DA4;
+    font-weight: bold;
+    text-decoration: none;
+    text-shadow: 2px 2px 2px black;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 12px;
+    transition: none !important; /* Remove all transitions */
+    will-change: auto !important;
+}
+
+.nav-link[draggable="false"]:active,
+.nav-link[draggable="false"]:focus {
+  color: #119DA4 !important;
+}
+
+.nav-link:hover {
+    background-color: #119DA4;
+    color: #00303b !important;
+    font-weight: bold;
+    text-shadow: none;
+}
+
+.nav-link:active {
+    background-color: #0d666b !important;
+    color: #003f4f !important;
+    font-weight: bolder !important;
+}
+
+.nav-link.active {
+    /*padding: 10px 12px !important;*/
+    font-weight: bold;
+    text-decoration: none;
+    text-shadow: none;
+    animation: none !important;
+    background-color: #119DA4 !important;
+    color: #003f4f !important;
+    transform: translateZ(0); /* Force GPU layer */
+}
+
+.nav-link.account-style {
+    color: #119DA4 !important;
+    text-shadow: 2px 2px 2px black !important;
+}
+
+.nav-link.account-style:hover {
+    background-color: #119DA4 !important;
+    color: #00303b !important;
+    text-shadow: none !important;
+}
+
+.college-container .btn-link {
+    display: inline-block;
+    padding: 10px 20px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 50px;
+    border: 2px solid;
+}
+
+.college-container .btn-link {
+    background-color: transparent;
+    color: inherit;
+}
+
+.college-container:nth-child(odd) .btn-link {
+    background-color: #13505b !important;
+    color: #F1FDFF !important;
+    border-color: #13505b !important;
+}
+
+.college-container:nth-child(even) .btn-link {
+    background-color: #F1FDFF !important;
+    color: #275861 !important;
+    border-color: #275861 !important;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.input-group-text {
+    cursor: pointer;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .navbar {
+        padding: 0 30px;
+    }
+    
+    .navbar-links {
+        gap: 18px;
+    }
+    
+    .nav-link {
+        padding: 0 8px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 1100px) {
+    .navbar-links {
+        gap: 14px;
+    }
+    
+    .nav-link {
+        padding: 0 6px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .navbar {
+        padding: 0 20px;
+    }
+    
+    .navbar-links {
+        gap: 8px;
+    }
+    
+    .nav-link {
+        padding: 0 4px;
+        font-size: 0.9rem;
+    }
+}
+
+/* New breakpoint specifically for 892px issue */
+@media (max-width: 900px) {
+    .navbar {
+        padding: 0 15px;
+    }
+    
+    .navbar-logo {
+        font-size: 1.3rem;
+    }
+    
+    .navbar-links {
+        gap: 5px;
+    }
+    
+    .nav-link {
+        padding: 0 3px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Adjust tablet breakpoint to start earlier */
+@media (max-width: 800px) {
+    .navbar {
+        height: auto;
+        padding: 15px 20px;
+        flex-direction: column;
+    }
+    
+    .navbar-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        margin-top: 15px;
+        transition: none !important;
+    }
+    
+    .nav-link {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 0;
+        font-size: 1.1rem; /* Restore original font size for vertical layout */
+    }
+    
+    .carousel-inner,
+    .carousel-item {
+        height: 50vw;
+    }
+}
+
+@media (max-width: 576px) {
+    .section-light,
+    .section-dark {
+        padding: 20px;
+    }
+    
+    .tournament-container,
+    .match-container {
+        padding: 20px;
+    }
+    
+    .team-box {
+        width: 40px;
+        height: 40px;
+    }
+}

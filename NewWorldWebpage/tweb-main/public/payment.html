@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Registration Payment - A New World</title>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <!-- Google Analytics -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/ga-id')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.gaId) {
+                        // inject GA script  
+                        const script = document.createElement('script');
+                        script.async = true;
+                        script.src = `https://www.googletagmanager.com/gtag/js?id=${data.gaId}`;
+                        document.head.appendChild(script);
+
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag() { dataLayer.push(arguments); }
+                        gtag('js', new Date());
+                        gtag('config', data.gaId);
+                    } else {
+                        console.log('Google Analytics not configured');
+                    }
+                });
+        });  
+    </script>
+    <style>
+        body {
+            height: 100vh;
+        }
+        #box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/" class="navbar-logo">Aardvark Games</a>
+        <div class="navbar-links">
+            <a href="/colleges" class="nav-link" draggable="false">Colleges</a>
+            <a href="/teams" class="nav-link" draggable="false">Teams</a>
+            <a href="/brackets" class="nav-link" draggable="false">Brackets</a>
+            <a href="/schedules" class="nav-link" draggable="false">Schedules</a>
+            <a href="/news" class="nav-link" draggable="false">News</a>
+            <a href="/about" class="nav-link" draggable="false">About Us</a>
+            <a href="/signup" class="nav-link" draggable="false">Account</a>
+        </div>
+    </nav>
+    
+    <div id="box" class="container mt-5">
+        <h1 class="text-center mb-4" style="padding: 2rem !important;">Tournament Registration Payment</h1>
+        
+        <!-- Dynamic greeting with ID -->
+        <p id="explain" class="explain text-center fs-5 mb-4"></p>
+        <p class="explain text-center fs-5 mb-4">Welcome to the Aardvark Games tournament payment page!</p>
+        <p class="explain text-center fs-5 mb-4">The payment amount for participation is $10 USD per player.</p>
+        <div class="card shadow-lg p-4 mb-5 bg-body rounded" style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <div class="card-body">
+                <p class="explain text-muted mb-4">Kindly input your card information in the provided form below, and then press Pay My Fee button to finalize your individual registration in the tournament.</p>
+                
+                <div id="card-element" class="mb-4 p-3 border rounded"></div>
+                
+                <button id="submit-payment" class="btn btn-primary w-100 py-2" style="max-width: 250px;">
+                    Pay My Fee
+                </button>
+                
+                <div id="payment-message" class="mt-2 text-danger small"></div>
+                
+                <p class="explain text-center mt-4">We're looking forward to having you! <span class="text-primary">:-)</span></p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Payment script -->
+    <script src="/js/handleacc.js" defer></script>
+    <script src="/js/payment.js" defer></script>
+</body>
+</html>
